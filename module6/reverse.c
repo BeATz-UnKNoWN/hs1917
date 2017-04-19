@@ -1,5 +1,5 @@
 /*
- * Andrew Timkov
+ * Andrew Timkov z5169762
  * UNSW Tutorials
  * Date: 10/4/17
  * Reverse a string
@@ -7,16 +7,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 char *reverse (char *message);
+void testReverse (void);
 
 int main (int argc, char *argv[]) {
-	char *pointer = reverse("dlroW olleH");
-
+	
+	//black box test
+	/*char *pointer = reverse("dlroW olleH");
 	while (*pointer != '\0') {
 		printf("%c", *pointer);
 		pointer++;
-	}
+	}*/
+
+	//unit test
+	testReverse();
 
 	return EXIT_SUCCESS;
 }
@@ -40,4 +46,18 @@ char *reverse (char *message) {
 	}
 
 	return reversed;
+}
+
+void testReverse (void) {
+	assert(strcmp(reverse("test"), "tset") == 0);
+	assert(strcmp(reverse("Hello World"), "dlroW olleH") == 0);
+	assert(strcmp(reverse("___l33t___"), "___t33l___") == 0);
+	assert(strcmp(reverse("racecar"), "racecar") == 0);
+	assert(strcmp(reverse("!emosewA erA uoY"), "You Are Awesome!") == 0);
+	assert(strcmp(reverse("qwerty"), "ytrewq") == 0);
+	assert(strcmp(reverse("..,,??~~"), "~~??,,..") == 0);
+
+	printf("All tests passed!\n");
+	
+	return;
 }
