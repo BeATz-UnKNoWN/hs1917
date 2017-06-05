@@ -1,0 +1,93 @@
+package com.andrew.dev.audioplayer;
+
+import com.andrew.dev.audioplayer.fragments.AlbumArtFragment;
+import com.andrew.dev.audioplayer.fragments.AllSongsFragment;
+
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity implements NavigationDrawerCallbacks, AllSongsFragment.OnSongSelected{
+    private NavigationDrawerFragment navigationDrawerFragment;
+    private Toolbar toolbar;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(toolbar);
+
+        navigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager().findFragmentById(R.id.fragment_drawer);
+        navigationDrawerFragment.setup(R.id.fragment_drawer, (DrawerLayout) findViewById(R.id.drawer), toolbar);
+
+        // keep a copy of this MainActivity in our Shared class for later use
+        Shared.main = this;
+    }
+
+    @Override
+    public void onNavigationDrawerItemSelected(int position) {
+        // managing the swapping between fragments (screen)
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        switch(position) {
+            case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, AlbumArtFragment.newInstance())
+                        .commit();
+                break;
+            case 1:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, AllSongsFragment.newInstance())
+                        .commit();
+                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // if the side bar is open, back button will close it
+        if (navigationDrawerFragment.isDrawerOpen())
+            navigationDrawerFragment.closeDrawer();
+        else
+            super.onBackPressed();
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (!navigationDrawerFragment.isDrawerOpen()) {
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        // settings not implemented so just provide a toast message
+        // to verify it works
+        if (id == R.id.action_settings) {
+            Toast.makeText(this, "pressed", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSongSelected(View view) {
+        //trackSelected(view);
+    }
+
+    public void onSectionAttached(int number) {
+
+    }
+}
